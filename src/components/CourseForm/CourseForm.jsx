@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './styles.module.css';
 
-export const CourseForm = ({authorsList, createCourse, createAuthor,handleSubmit}) => {
+// export const CourseForm = ({authorsList, createCourse, createAuthor,handleSubmit}) => {
 	//
 	// //write your code here
 	//
@@ -43,4 +43,4 @@ export const CourseForm = ({authorsList, createCourse, createAuthor,handleSubmit
 	// 		</div>
 	// 	</form>
 	// );
-};
+// };

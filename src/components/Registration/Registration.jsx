@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './styles.module.css';
 
-export const Registration = (handleSubmit) => {
+// export const Registration = (handleSubmit) => {
 
 	// write your code here
 
@@ -24,4 +24,4 @@ export const Registration = (handleSubmit) => {
 	// 		</p>
 	// 	</div>
 	// );
-};
+// };

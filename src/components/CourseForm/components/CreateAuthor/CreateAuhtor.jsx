@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CreateAuthor = ({onCreateAuthor}) => {
+// export const CreateAuthor = ({onCreateAuthor}) => {
   // write your code here
   // return (
   //   <div>
@@ -9,4 +9,4 @@ export const CreateAuthor = ({onCreateAuthor}) => {
   //     //reuse Button component with data-testid="createAuthorButton" attribute
   //   </div>
   // );
-};
+// };
