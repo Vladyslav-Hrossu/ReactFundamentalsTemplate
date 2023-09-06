@@ -1,17 +1,23 @@
-import React, {useState} from 'react';
-import {CourseInfo, Courses, Header} from "./components";
+import React, { useState } from "react";
+import { CourseInfo, Courses, Header } from "./components";
 
 // use mocked data till API implementation
-import {mockedAuthorsList, mockedCoursesList} from './constants';
+import { mockedAuthorsList, mockedCoursesList } from "./constants";
 
 // Task 2 and 3 - wrap your App with redux Provider and BrowserRouter in src/index.js
 
 function App() {
-  const [courses, setCourses] = useState(mockedCoursesList)
-  const [authors, setAuthors] = useState(mockedAuthorsList)
+  const [courses, setCourses] = useState(mockedCoursesList);
+  const [authors, setAuthors] = useState(mockedAuthorsList);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
 
-  let view = <Courses coursesList={courses} authorsList={authors} handleShowCourse={setSelectedCourseId}/>
+  let view = (
+    <Courses
+      coursesList={courses}
+      authorsList={authors}
+      handleShowCourse={setSelectedCourseId}
+    />
+  );
 
   if (selectedCourseId) {
     const selectedCourse = courses.find(
@@ -28,8 +34,8 @@ function App() {
   }
 
   return (
-    <div className='App'>
-      <Header/>
+    <div className="App">
+      <Header />
       {view}
     </div>
   );

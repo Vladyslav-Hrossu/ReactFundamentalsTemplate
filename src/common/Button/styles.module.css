@@ -1,13 +1,13 @@
 .button {
-    height: fit-content;
-    padding: 8px 16px;
-    background-color: #007298;
-    border-radius: 4px;
-    color: white;
-    border: none;
+  height: fit-content;
+  padding: 8px 16px;
+  background-color: #007298;
+  border-radius: 4px;
+  color: white;
+  border: none;
 
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 24px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
 }

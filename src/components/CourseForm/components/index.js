@@ -1,2 +1,2 @@
-export * from './AuthorItem';
-export * from './CreateAuthor';
+export * from "./AuthorItem";
+export * from "./CreateAuthor";

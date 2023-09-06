@@ -1,16 +1,16 @@
 .headerContainer {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
-    padding: 0 32px;
-    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.15);
 }
 
 .userContainer {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .userName {
-    margin-right: 50px;
+  margin-right: 50px;
 }

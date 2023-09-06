@@ -1,16 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import {formatCreationDate, getCourseDuration} from '../../../../helpers';
-import styles from './styles.module.css';
-import {Button} from "../../../../common";
-import {mockedAuthorsList} from "../../../../constants";
+import { formatCreationDate, getCourseDuration } from "../../../../helpers";
+import styles from "./styles.module.css";
+import { Button } from "../../../../common";
+import { mockedAuthorsList } from "../../../../constants";
 
-export const CourseCard = ({course, handleShowCourse}) => {
-
+export const CourseCard = ({ course, handleShowCourse }) => {
   // write your code here
 
   return (
-    <div className={styles.cardContainer} data-testid='courseCard'>
+    <div className={styles.cardContainer} data-testid="courseCard">
       <div className={styles.cardText}>
         <h2>{course.title}</h2>
         <p>{course.description}</p>
@@ -23,7 +22,8 @@ export const CourseCard = ({course, handleShowCourse}) => {
               (authorId) =>
                 mockedAuthorsList.find((author) => author.id === authorId)?.name
             )
-            .join(", ")}</p>
+            .join(", ")}
+        </p>
         <p>
           <b>Duration: </b>
           <span>{getCourseDuration(course.duration)}</span>
@@ -33,7 +33,10 @@ export const CourseCard = ({course, handleShowCourse}) => {
           <span>{formatCreationDate(course.creationDate)}</span>
         </p>
         <div>
-          <Button buttonText='Show course' handleClick={() => handleShowCourse(course.id)}/>
+          <Button
+            buttonText="Show course"
+            handleClick={() => handleShowCourse(course.id)}
+          />
 
           {/*<Button buttonText='Delete' data-testid="deleteCourse"/>*/}
           {/*<Button buttonText='Update' data-testid="updateCourse"/>*/}
