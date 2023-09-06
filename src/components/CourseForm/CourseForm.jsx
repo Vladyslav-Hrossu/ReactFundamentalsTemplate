@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './styles.module.css';
 
-export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
+export const CourseForm = ({authorsList, createCourse, createAuthor,handleSubmit}) => {
 
 	//write your code here
 
