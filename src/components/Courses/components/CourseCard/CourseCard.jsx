@@ -38,12 +38,11 @@ export const CourseCard = ({course, handleShowCourse}) => {
             handleClick={() => handleShowCourse(course.id)}
           />
 
-          // reuse Button component for 'Show course' button
-          // reuse Button component for 'Delete' button with data-testid="deleteCourse"
-          // reuse Button component for 'Update' button with data-testid="updateCourse"
-
         </div>
       </div>
     </div>
   );
+  // reuse Button component for 'Show course' button
+  // reuse Button component for 'Delete' button with data-testid="deleteCourse"
+  // reuse Button component for 'Update' button with data-testid="updateCourse"
 };
