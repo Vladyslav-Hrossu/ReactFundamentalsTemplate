@@ -7,8 +7,8 @@ import { mockedAuthorsList, mockedCoursesList } from "./constants";
 // Task 2 and 3 - wrap your App with redux Provider and BrowserRouter in src/index.js
 
 function App() {
-  const [courses, setCourses] = useState(mockedCoursesList);
-  const [authors, setAuthors] = useState(mockedAuthorsList);
+  const [courses] = useState(mockedCoursesList);
+  const [authors] = useState(mockedAuthorsList);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   let view = (
