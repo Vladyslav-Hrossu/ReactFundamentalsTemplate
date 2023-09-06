@@ -3,9 +3,8 @@ import React from "react";
 import { formatCreationDate, getCourseDuration } from "../../../../helpers";
 import styles from "./styles.module.css";
 import { Button } from "../../../../common";
-import { mockedAuthorsList } from "../../../../constants";
 
-export const CourseCard = ({course, handleShowCourse}) => {
+export const CourseCard = ({course, handleShowCourse, authorsList}) => {
   // write your code here
 
   return (
@@ -20,7 +19,7 @@ export const CourseCard = ({course, handleShowCourse}) => {
           {course.authors
             .map(
               (authorId) =>
-                mockedAuthorsList.find((author) => author.id === authorId)?.name
+                authorsList.find((author) => author.id === authorId)?.name
             )
             .join(", ")}
         </p>

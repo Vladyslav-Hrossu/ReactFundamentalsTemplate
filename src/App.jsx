@@ -7,15 +7,22 @@ import { mockedAuthorsList, mockedCoursesList } from "./constants";
 // Task 2 and 3 - wrap your App with redux Provider and BrowserRouter in src/index.js
 
 function App() {
-  const [courses] = useState(mockedCoursesList);
+  const [courses, setCoursesList] = useState(mockedCoursesList);
   const [authors] = useState(mockedAuthorsList);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
+
+  const filterCourses = (searchQuery) => {
+    const filteredCourses = mockedCoursesList.filter(({title, id}) => title.toLowerCase().includes(searchQuery.toLowerCase())
+      || id.toLowerCase().includes(searchQuery.toLowerCase()))
+    setCoursesList(filteredCourses);
+  }
 
   let view = (
     <Courses
       coursesList={courses}
       authorsList={authors}
       handleShowCourse={setSelectedCourseId}
+      handleCoursesFilter={filterCourses}
     />
   );
 
