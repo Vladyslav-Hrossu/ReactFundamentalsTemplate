@@ -20,14 +20,11 @@ function App() {
   );
 
   if (selectedCourseId) {
-    const selectedCourse = courses.find(
-      (course) => course.id === selectedCourseId
-    );
     view = (
       <CourseInfo
-        course={selectedCourse}
-        setSelectedCourseId={setSelectedCourseId}
+        coursesList={courses}
         authorsList={authors}
+        showCourseId={selectedCourseId}
         onBack={setSelectedCourseId}
       />
     );

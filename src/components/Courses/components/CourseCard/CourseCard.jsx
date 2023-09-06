@@ -5,11 +5,11 @@ import styles from "./styles.module.css";
 import { Button } from "../../../../common";
 import { mockedAuthorsList } from "../../../../constants";
 
-export const CourseCard = ({ course, handleShowCourse }) => {
+export const CourseCard = ({course, handleShowCourse}) => {
   // write your code here
 
   return (
-    <div className={styles.cardContainer} data-testid="courseCard">
+    <div className={styles.cardContainer} data-testid='courseCard'>
       <div className={styles.cardText}>
         <h2>{course.title}</h2>
         <p>{course.description}</p>
@@ -38,8 +38,10 @@ export const CourseCard = ({ course, handleShowCourse }) => {
             handleClick={() => handleShowCourse(course.id)}
           />
 
-          {/*<Button buttonText='Delete' data-testid="deleteCourse"/>*/}
-          {/*<Button buttonText='Update' data-testid="updateCourse"/>*/}
+          // reuse Button component for 'Show course' button
+          // reuse Button component for 'Delete' button with data-testid="deleteCourse"
+          // reuse Button component for 'Update' button with data-testid="updateCourse"
+
         </div>
       </div>
     </div>
