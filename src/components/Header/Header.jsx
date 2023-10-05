@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserNameSelector } from '../../store/selectors';
-import { removeUserData } from '../../store/slices/userSlice';
+import { logoutThunk } from '../../store/thunks/userThunk';
 
 export const Header = () => {
 	const dispatch = useDispatch();
@@ -17,7 +17,8 @@ export const Header = () => {
 	const token = localStorage.getItem('token');
 
 	const handleLogout = () => {
-		dispatch(removeUserData());
+		dispatch(logoutThunk());
+
 		localStorage.removeItem('token');
 		navigate('/login');
 	};

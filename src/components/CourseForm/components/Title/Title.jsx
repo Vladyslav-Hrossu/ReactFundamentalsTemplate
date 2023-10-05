@@ -1,13 +1,9 @@
 import React from 'react';
 
 import { Button, Input } from '../../../../common';
-import {
-	CREATE_COURSE_BUTTON_TEXT,
-	TITLE,
-	TITLE_PLACEHOLDER,
-} from './constants';
+import { TITLE, TITLE_PLACEHOLDER } from './constants';
 
-export const Title = ({ addTitle, value, handleSubmit }) => {
+export const Title = ({ addTitle, value, handleSubmit, isUpdateMode }) => {
 	return (
 		<div>
 			<Input
@@ -18,7 +14,7 @@ export const Title = ({ addTitle, value, handleSubmit }) => {
 				data-testid='titleInput'
 			/>
 			<Button
-				buttonText={CREATE_COURSE_BUTTON_TEXT}
+				buttonText={isUpdateMode ? 'update course' : 'create course'}
 				handleClick={handleSubmit}
 				data-testid='createCourseButton'
 			/>

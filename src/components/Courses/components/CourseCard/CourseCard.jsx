@@ -7,13 +7,19 @@ import { getCourseDuration, formatCreationDate } from '../../../../helpers';
 import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthorsSelector } from '../../../../store/selectors';
-import { deleteCourse } from '../../../../store/slices/coursesSlice';
+import {
+	getAuthorsSelector,
+	getUserRoleSelector,
+	getUserTokenSelector,
+} from '../../../../store/selectors';
+import { deleteCourseThunk } from '../../../../store/thunks/coursesThunk';
 
 export const CourseCard = ({ course }) => {
 	const { title, description, authors, duration, creationDate, id } = course;
 	const dispatch = useDispatch();
 	const allAuthors = useSelector(getAuthorsSelector);
+	const userRole = useSelector(getUserRoleSelector);
+	const token = useSelector(getUserTokenSelector);
 	const getAuthors = () => {
 		return allAuthors
 			.filter((author) => authors.includes(author.id))
@@ -42,12 +48,18 @@ export const CourseCard = ({ course }) => {
 				<Link to={`/courses/${id}`}>
 					<Button buttonText={SHOW_COURSE} />
 				</Link>
-				<Button
-					buttonText='Delete'
-					handleClick={() => dispatch(deleteCourse(id))}
-					data-testid='deleteCourse'
-				/>
-				<Button buttonText='Update' data-testid='updateCourse' />
+				{userRole === 'admin' && (
+					<>
+						<Button
+							buttonText='Del'
+							handleClick={() => dispatch(deleteCourseThunk(id, token))}
+							data-testid='deleteCourse'
+						/>
+						<Link to={`/courses/update/${id}`}>
+							<Button buttonText='Up' data-testid='updateCourse' />
+						</Link>
+					</>
+				)}
 			</div>
 		</div>
 	);

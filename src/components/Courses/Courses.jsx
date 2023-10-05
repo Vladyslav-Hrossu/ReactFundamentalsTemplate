@@ -7,12 +7,17 @@ import { ADD_NEW_COURSE } from './constants';
 import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getAuthorsSelector, getCoursesSelector } from '../../store/selectors';
+import {
+	getAuthorsSelector,
+	getCoursesSelector,
+	getUserRoleSelector,
+} from '../../store/selectors';
 
-export const Courses = ({ handleShowCourse }) => {
+export const Courses = () => {
 	const allCourses = useSelector(getCoursesSelector);
 	const authorsList = useSelector(getAuthorsSelector);
 	const [courses, setCourses] = useState(allCourses);
+	const role = useSelector(getUserRoleSelector);
 
 	const handleSearch = (value) => {
 		const searchedCourses = courses.filter(
@@ -41,11 +46,17 @@ export const Courses = ({ handleShowCourse }) => {
 			))}
 		</>
 	) : (
-		<div>
-			<h1>Your List Is EMPTY</h1>
-			<Link to={'/courses/add'}>
-				<Button buttonText='Add new course' data-testid='addCourse' />
-			</Link>
-		</div>
+		<>
+			{role === 'admin' ? (
+				<div>
+					<h1>Your List Is Empty</h1>
+					<Link to={'/courses/add'}>
+						<Button buttonText='Add new course' data-testid='addCourse' />
+					</Link>
+				</div>
+			) : (
+				<div>You don't have permissions</div>
+			)}
+		</>
 	);
 };

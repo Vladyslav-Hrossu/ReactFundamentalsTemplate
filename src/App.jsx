@@ -10,24 +10,26 @@ import { Login } from './components/Login';
 import { CourseInfo } from './components/CourseInfo';
 import { Registration } from './components/Registration';
 import { Route, Routes } from 'react-router';
-import { getAuthors, getCourses } from './services';
-import { useDispatch } from 'react-redux';
-import { setAuthors } from './store/slices/authorsSlice';
-import { setCourses } from './store/slices/coursesSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCoursesThunk } from './store/thunks/coursesThunk';
+import { getAuthorsThunk } from './store/thunks/authorsThunk';
+import { getUserThunk } from './store/thunks/userThunk';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
+import { getUserTokenSelector } from './store/selectors';
 
 function App() {
-	const token = localStorage.getItem('token');
+	const token = useSelector(getUserTokenSelector);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const courses = await getCourses();
-			const authors = await getAuthors();
-			dispatch(setCourses(courses.result));
-			dispatch(setAuthors(authors.result));
-		};
+		dispatch(getCoursesThunk());
+		dispatch(getAuthorsThunk());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
 		if (token) {
-			fetchData();
+			dispatch(getUserThunk(token));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
@@ -41,8 +43,24 @@ function App() {
 					<Route path='/registration' element={<Registration />} />
 					<Route path='/login' element={<Login />} />
 					<Route path='/courses' element={<Courses />} />
-					<Route path='/courses/add' element={<CourseForm />} />
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
+
+					<Route
+						path='/courses/add'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/courses/update/:courseId'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 			</div>
 		</>

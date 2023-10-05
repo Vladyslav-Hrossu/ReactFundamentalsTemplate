@@ -8,28 +8,47 @@ import {
 	Title,
 } from './components';
 import { ADD_BUTTON_TYPE, DELETE_BUTTON_TYPE } from './constants';
-import { getCreationDate } from '../../helpers';
 
 import styles from './styles.module.css';
 
 // TODO: will be removed after API calls be added
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveCourse } from '../../store/slices/coursesSlice';
-import { getAuthorsSelector } from '../../store/selectors';
+import {
+	getAuthorsSelector,
+	getCoursesSelector,
+	getUserTokenSelector,
+} from '../../store/selectors';
+import {
+	createCourseThunk,
+	updateCourseThunk,
+} from '../../store/thunks/coursesThunk';
 
-export const CourseForm = ({ createAuthor, createCourse }) => {
+export const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const authors = useSelector(getAuthorsSelector);
+	const { courseId } = useParams();
+	const isUpdateMode = !!courseId;
 
-	const [authorsList, setAuthorsList] = useState(authors);
-	const [courseAuthors, setCourseAuthors] = useState([]);
+	const allCourses = useSelector(getCoursesSelector);
+	const allAuthors = useSelector(getAuthorsSelector);
+	const token = useSelector(getUserTokenSelector);
+	const [authorsList, setAuthorsList] = useState(allAuthors);
+
+	const { id, title, creationDate, duration, description, authors } =
+		allCourses.find((item) => item.id === courseId) || {};
+
+	const currentCourseAuthors =
+		isUpdateMode && allAuthors.filter((author) => authors.includes(author.id));
+
+	const [courseAuthors, setCourseAuthors] = useState(
+		currentCourseAuthors || []
+	);
+
 	const [courseInfo, setCourseInfo] = useState({
-		id: String(Date.now()),
-		title: '',
-		description: '',
-		duration: '',
+		title: title || '',
+		description: description || '',
+		duration: duration || '',
 	});
 
 	const addCourseData = (type, data) => {
@@ -60,34 +79,34 @@ export const CourseForm = ({ createAuthor, createCourse }) => {
 		event.preventDefault();
 		const authorsIds = courseAuthors.map((item) => item.id);
 
-		const newCourse = {
+		const course = {
 			...courseInfo,
-			creationDate: getCreationDate(),
 			authors: authorsIds,
-			duration: +courseInfo.duration,
 		};
 
 		if (
-			newCourse.title.length === 0 ||
-			newCourse.description.length === 0 ||
-			newCourse.duration === 0 ||
-			newCourse.authors.length === 0
+			course.title.length === 0 ||
+			course.description.length === 0 ||
+			course.duration === 0 ||
+			course.authors.length === 0
 		) {
 			alert('Please, fill in all fields');
 			return;
 		}
 
-		if (newCourse.description.length < 2) {
+		if (course.description.length < 2) {
 			alert('Description should has at least 2 symbols');
 			return;
 		}
-		dispatch(saveCourse(newCourse));
+		isUpdateMode
+			? dispatch(updateCourseThunk({ ...course, creationDate, id }, token))
+			: dispatch(createCourseThunk(course, token));
 		navigate('/courses');
 	};
 
 	useEffect(() => {
-		setAuthorsList(authors);
-	}, [authors]);
+		setAuthorsList(allAuthors);
+	}, [allAuthors]);
 
 	return (
 		<form>
@@ -95,6 +114,7 @@ export const CourseForm = ({ createAuthor, createCourse }) => {
 				addTitle={addCourseData}
 				value={courseInfo.title}
 				handleSubmit={handleSubmit}
+				isUpdateMode={isUpdateMode}
 			/>
 			<Description
 				addDescription={addCourseData}
@@ -107,8 +127,8 @@ export const CourseForm = ({ createAuthor, createCourse }) => {
 				</div>
 				<div className={styles.authorsContainer}>
 					<strong>Authors</strong>
-					{authors.length &&
-						authors.map((author) => (
+					{allAuthors.length &&
+						allAuthors.map((author) => (
 							<AuthorItem
 								handleClick={addAuthor}
 								key={author.id}

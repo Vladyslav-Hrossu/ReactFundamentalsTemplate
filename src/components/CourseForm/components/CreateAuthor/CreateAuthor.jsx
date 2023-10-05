@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Input } from '../../../../common';
+import { AUTHOR_NAME, CREATE_AUTHOR_BUTTON_TEXT } from './constants';
+import { createAuthorThunk } from '../../../../store/thunks/authorsThunk';
+import { getUserTokenSelector } from '../../../../store/selectors';
 
 import styles from './styles.module.css';
-import { useDispatch } from 'react-redux';
-import { saveAuthor } from '../../../../store/slices/authorsSlice';
 
 export const CreateAuthor = () => {
 	const dispatch = useDispatch();
+	const token = useSelector(getUserTokenSelector);
 	const [name, setName] = useState('');
 
 	const handleCreateAuthor = () => {
-		const newAuthor = {
-			id: Date.now(),
-			name,
-		};
-		dispatch(saveAuthor(newAuthor));
+		dispatch(createAuthorThunk({ name }, token));
 		setName('');
 	};
 
@@ -24,12 +23,16 @@ export const CreateAuthor = () => {
 			<Input
 				inputClassName={styles.input}
 				labelClassName={styles.label}
-				labelText={'Author name'}
+				labelText={AUTHOR_NAME}
 				value={name}
 				onChange={({ target }) => setName(target.value)}
-				placeholderText={'Enter author name'}
+				placeholderText='enter author name'
+				data-testid='createAuthorInput'
 			/>
-			<Button buttonText={'Create author'} handleClick={handleCreateAuthor} />
+			<Button
+				buttonText={CREATE_AUTHOR_BUTTON_TEXT}
+				handleClick={handleCreateAuthor}
+			/>
 		</div>
 	);
 };
