@@ -38,6 +38,8 @@ export const getCourses = async () => {
 		},
 	});
 
+	console.log(response.ok);
+
 	if (!response.ok) {
 		throw new Error('Network Error');
 	}
@@ -52,6 +54,8 @@ export const getAuthors = async () => {
 			'Content-Type': 'application/json',
 		},
 	});
+
+	console.log(response.ok);
 
 	if (!response.ok) {
 		throw new Error('Network Error');

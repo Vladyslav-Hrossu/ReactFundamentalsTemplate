@@ -3,12 +3,17 @@ import { Button } from '../../common';
 import { formatCreationDate, getCourseDuration } from '../../helpers';
 
 import styles from './styles.module.css';
+import { useSelector } from 'react-redux';
+import { getAuthorsSelector, getCoursesSelector } from '../../store/selectors';
 
-export const CourseInfo = ({ coursesList, authorsList }) => {
+export const CourseInfo = () => {
+	const allCourses = useSelector(getCoursesSelector);
+	const allAuthors = useSelector(getAuthorsSelector);
 	const { courseId } = useParams();
-	const course = coursesList.find((item) => item.id === courseId);
+
+	const course = allCourses.find((item) => item.id === courseId);
 	const { id, title, creationDate, duration, description } = course;
-	const authors = authorsList.filter((author) =>
+	const authors = allAuthors.filter((author) =>
 		course.authors.includes(author.id)
 	);
 

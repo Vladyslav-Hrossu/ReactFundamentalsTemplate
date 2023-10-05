@@ -13,45 +13,26 @@ import {
 import { LOGIN } from './constants';
 
 import styles from './styles.module.css';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../../store/slices/userSlice';
 
-export const Login = ({ setName }) => {
-	const [email, changeEmail] = useState('');
-	const [password, changePassword] = useState('');
-	const [emailError, setemailError] = useState(false);
-	const [passwordError, setPasswordError] = useState(false);
+export const Login = () => {
+	const dispatch = useDispatch();
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
-
-	const setEmail = (value) => {
-		changeEmail(value);
-		setemailError(false);
-	};
-
-	const setPassword = (value) => {
-		changePassword(value);
-		setPasswordError(false);
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!email || !password) {
-			if (!email) {
-				setemailError(true);
-			}
-			if (!password) {
-				setPasswordError(true);
-			}
-			return;
-		}
 		const data = {
 			email,
 			password,
 		};
 
 		login(data).then((result) => {
-			console.log(result.user.name);
-			setName(result.user.name);
-			navigate('/courses');
 			localStorage.setItem('token', result.result);
+			dispatch(setUserData({ ...result.user, token: result.result }));
+			navigate('/courses');
 		});
 	};
 
@@ -65,7 +46,6 @@ export const Login = ({ setName }) => {
 					onChange={({ target }) => setEmail(target.value)}
 					value={email}
 				/>
-				{emailError && <span>Email is required.</span>}
 				<Input
 					placeholderText={PASSWORD_PLACEHOLDER}
 					labelText={PASSWORD}
@@ -73,7 +53,6 @@ export const Login = ({ setName }) => {
 					value={password}
 					type='password'
 				/>
-				{passwordError && <span>Password is required.</span>}
 				<Button type='submit' buttonText={LOGIN} className={styles.button} />
 			</form>
 			<p>

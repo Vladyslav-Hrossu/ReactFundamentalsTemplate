@@ -14,11 +14,16 @@ import styles from './styles.module.css';
 
 // TODO: will be removed after API calls be added
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveCourse } from '../../store/slices/coursesSlice';
+import { getAuthorsSelector } from '../../store/selectors';
 
-export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
+export const CourseForm = ({ createAuthor, createCourse }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const authors = useSelector(getAuthorsSelector);
 
-	const [authors, setAuthorsList] = useState(authorsList);
+	const [authorsList, setAuthorsList] = useState(authors);
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [courseInfo, setCourseInfo] = useState({
 		id: String(Date.now()),
@@ -34,24 +39,21 @@ export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
 	const addAuthor = (author) => {
 		setCourseAuthors([...courseAuthors, author]);
 
-		const newAllAuthorsList = authors.filter((item) => author.id !== item.id);
+		const newAllAuthorsList = authorsList.filter(
+			(item) => author.id !== item.id
+		);
 
 		setAuthorsList(newAllAuthorsList);
 	};
 
 	const deleteAuthor = (author) => {
-		setAuthorsList([...authors, author]);
+		setAuthorsList([...authorsList, author]);
 
 		const newCourseAuthorsList = courseAuthors.filter(
 			(item) => author.id !== item.id
 		);
 
 		setCourseAuthors(newCourseAuthorsList);
-	};
-
-	const saveAuthor = (newAuthor) => {
-		createAuthor([...authors, newAuthor]);
-		setAuthorsList([...authors, newAuthor]);
 	};
 
 	const handleSubmit = (event) => {
@@ -62,6 +64,7 @@ export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
 			...courseInfo,
 			creationDate: getCreationDate(),
 			authors: authorsIds,
+			duration: +courseInfo.duration,
 		};
 
 		if (
@@ -78,7 +81,7 @@ export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
 			alert('Description should has at least 2 symbols');
 			return;
 		}
-		createCourse(newCourse);
+		dispatch(saveCourse(newCourse));
 		navigate('/courses');
 	};
 
@@ -99,7 +102,7 @@ export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
 			/>
 			<div className={styles.infoWrapper}>
 				<div>
-					<CreateAuthor createAuthor={saveAuthor} />
+					<CreateAuthor />
 					<Duration addDuration={addCourseData} value={courseInfo.duration} />
 				</div>
 				<div className={styles.authorsContainer}>

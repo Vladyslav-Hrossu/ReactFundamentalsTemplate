@@ -6,12 +6,18 @@ import { Logo } from './components';
 
 import styles from './styles.module.css';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserNameSelector } from '../../store/selectors';
+import { removeUserData } from '../../store/slices/userSlice';
 
 export const Header = () => {
+	const dispatch = useDispatch();
+	const name = useSelector(getUserNameSelector);
 	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
 
 	const handleLogout = () => {
+		dispatch(removeUserData());
 		localStorage.removeItem('token');
 		navigate('/login');
 	};
@@ -20,6 +26,7 @@ export const Header = () => {
 		<div className={styles.headerContainer}>
 			<Logo />
 			<div className={styles.userContainer}>
+				{name}
 				{token && <Button buttonText={LOGOUT} handleClick={handleLogout} />}
 			</div>
 		</div>

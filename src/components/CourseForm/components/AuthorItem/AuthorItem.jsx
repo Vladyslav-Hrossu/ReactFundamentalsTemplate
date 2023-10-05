@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 
 export const AuthorItem = ({ name, id, type, handleClick }) => {
 	return (
-		<div className={styles.authorItem} data-testid='authorItem'>
+		<div className={styles.authorItem}>
 			<span>{name}</span>
 			<Button
 				handleClick={() => handleClick({ id, name })}

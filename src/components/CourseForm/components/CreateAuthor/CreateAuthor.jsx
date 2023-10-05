@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 
 import { Button, Input } from '../../../../common';
-import {
-	AUTHOR_NAME,
-	AUTHOR_NAME_PLACEHOLDER,
-	CREATE_AUTHOR_BUTTON_TEXT,
-} from './constants';
 
 import styles from './styles.module.css';
+import { useDispatch } from 'react-redux';
+import { saveAuthor } from '../../../../store/slices/authorsSlice';
 
-export const CreateAuthor = ({ createAuthor }) => {
+export const CreateAuthor = () => {
+	const dispatch = useDispatch();
 	const [name, setName] = useState('');
 
 	const handleCreateAuthor = () => {
@@ -17,7 +15,7 @@ export const CreateAuthor = ({ createAuthor }) => {
 			id: Date.now(),
 			name,
 		};
-		createAuthor(newAuthor);
+		dispatch(saveAuthor(newAuthor));
 		setName('');
 	};
 
@@ -26,17 +24,12 @@ export const CreateAuthor = ({ createAuthor }) => {
 			<Input
 				inputClassName={styles.input}
 				labelClassName={styles.label}
-				labelText={AUTHOR_NAME}
+				labelText={'Author name'}
 				value={name}
 				onChange={({ target }) => setName(target.value)}
-				placeholderText={AUTHOR_NAME_PLACEHOLDER}
-				data-testid='createAuthorInput'
+				placeholderText={'Enter author name'}
 			/>
-			<Button
-				buttonText={CREATE_AUTHOR_BUTTON_TEXT}
-				handleClick={handleCreateAuthor}
-				data-testid='createAuthorButton'
-			/>
+			<Button buttonText={'Create author'} handleClick={handleCreateAuthor} />
 		</div>
 	);
 };

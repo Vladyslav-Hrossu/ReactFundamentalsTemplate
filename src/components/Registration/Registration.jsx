@@ -16,42 +16,13 @@ import { createUser } from '../../services';
 import styles from './styles.module.css';
 
 export const Registration = () => {
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
-
-	const [name, changeName] = useState('');
-	const [email, changeEmail] = useState('');
-	const [password, changePassword] = useState('');
-	const [emailError, setemailError] = useState(false);
-	const [passwordError, setPasswordError] = useState(false);
-	const [nameError, setnameError] = useState(false);
-
-	const setEmail = (value) => {
-		changeEmail(value);
-		setemailError(false);
-	};
-	const setPassword = (value) => {
-		changePassword(value);
-		setPasswordError(false);
-	};
-	const setName = (value) => {
-		changeName(value);
-		setnameError(false);
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!email || !password || !name) {
-			if (!email) {
-				setemailError(true);
-			}
-			if (!password) {
-				setPasswordError(true);
-			}
-			if (!name) {
-				setnameError(true);
-			}
-			return;
-		}
 		const data = {
 			name,
 			email,
@@ -71,14 +42,12 @@ export const Registration = () => {
 					onChange={({ target }) => setName(target.value)}
 					value={name}
 				/>
-				{nameError && <span>Name is required.</span>}
 				<Input
 					placeholderText={EMAIL_PLACEHOLDER}
 					labelText={EMAIL}
 					onChange={({ target }) => setEmail(target.value)}
 					value={email}
 				/>
-				{emailError && <span>Email is required.</span>}
 				<Input
 					placeholderText={PASSWORD_PLACEHOLDER}
 					labelText={PASSWORD}
@@ -86,7 +55,6 @@ export const Registration = () => {
 					value={password}
 					type='password'
 				/>
-				{passwordError && <span>Password is required.</span>}
 				<Button
 					type='submit'
 					buttonText={REGISTRATION}
