@@ -1,46 +1,133 @@
-// import React from "react";
+import React, { useEffect, useState } from 'react';
 
-// import styles from "./styles.module.css";
+import {
+	AuthorItem,
+	CreateAuthor,
+	Description,
+	Duration,
+	Title,
+} from './components';
+import { ADD_BUTTON_TYPE, DELETE_BUTTON_TYPE } from './constants';
+import { getCreationDate } from '../../helpers';
 
-// export const CourseForm = ({authorsList, createCourse, createAuthor,handleSubmit}) => {
-//
-// //write your code here
-//
-// return (
-// 	<form onSubmit={handleSubmit}>
-// 		<div>
-// 			// reuse Input component for title field with data-testid="titleInput"
-//
-// 			// reuse Button component for 'Save course' button with data-testid="createCourseButton"
-// 		</div>
-//
-// 		<label>
-// 			Description
-// 			<textarea data-testid="descriptionTextArea" />
-// 		</label>
-//
-// 		<div className={styles.infoWrapper}>
-// 			<div>
-// 				// use CreateAuthor component
-//
-// 				// reuse Input component with data-testid='durationInput' for duration field
-//
-// 				<p>Duration: </p>
-// 			</div>
-//
-// 			<div className={styles.authorsContainer}>
-// 				<strong>Authors</strong>
-//
-// 				// use 'map' to display all available autors. Reuse 'AuthorItem' component for each author
-//
-// 				<strong>Course authors</strong>
-//
-// 				// use 'map' to display course's autors
-// 				{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
-//
-// 				<p className={styles.notification}>List is empty</p> // display this paragraph if there are no authors in the course
-// 			</div>
-// 		</div>
-// 	</form>
-// );
-// };
+import styles from './styles.module.css';
+
+// TODO: will be removed after API calls be added
+import { useNavigate } from 'react-router-dom';
+
+export const CourseForm = ({ createAuthor, createCourse, authorsList }) => {
+	const navigate = useNavigate();
+
+	const [authors, setAuthorsList] = useState(authorsList);
+	const [courseAuthors, setCourseAuthors] = useState([]);
+	const [courseInfo, setCourseInfo] = useState({
+		id: String(Date.now()),
+		title: '',
+		description: '',
+		duration: '',
+	});
+
+	const addCourseData = (type, data) => {
+		setCourseInfo({ ...courseInfo, [type]: data });
+	};
+
+	const addAuthor = (author) => {
+		setCourseAuthors([...courseAuthors, author]);
+
+		const newAllAuthorsList = authors.filter((item) => author.id !== item.id);
+
+		setAuthorsList(newAllAuthorsList);
+	};
+
+	const deleteAuthor = (author) => {
+		setAuthorsList([...authors, author]);
+
+		const newCourseAuthorsList = courseAuthors.filter(
+			(item) => author.id !== item.id
+		);
+
+		setCourseAuthors(newCourseAuthorsList);
+	};
+
+	const saveAuthor = (newAuthor) => {
+		createAuthor([...authors, newAuthor]);
+		setAuthorsList([...authors, newAuthor]);
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		const authorsIds = courseAuthors.map((item) => item.id);
+
+		const newCourse = {
+			...courseInfo,
+			creationDate: getCreationDate(),
+			authors: authorsIds,
+		};
+
+		if (
+			newCourse.title.length === 0 ||
+			newCourse.description.length === 0 ||
+			newCourse.duration === 0 ||
+			newCourse.authors.length === 0
+		) {
+			alert('Please, fill in all fields');
+			return;
+		}
+
+		if (newCourse.description.length < 2) {
+			alert('Description should has at least 2 symbols');
+			return;
+		}
+		createCourse(newCourse);
+		navigate('/courses');
+	};
+
+	useEffect(() => {
+		setAuthorsList(authors);
+	}, [authors]);
+
+	return (
+		<form>
+			<Title
+				addTitle={addCourseData}
+				value={courseInfo.title}
+				handleSubmit={handleSubmit}
+			/>
+			<Description
+				addDescription={addCourseData}
+				value={courseInfo.description}
+			/>
+			<div className={styles.infoWrapper}>
+				<div>
+					<CreateAuthor createAuthor={saveAuthor} />
+					<Duration addDuration={addCourseData} value={courseInfo.duration} />
+				</div>
+				<div className={styles.authorsContainer}>
+					<strong>Authors</strong>
+					{authors.length &&
+						authors.map((author) => (
+							<AuthorItem
+								handleClick={addAuthor}
+								key={author.id}
+								{...author}
+								type={ADD_BUTTON_TYPE}
+							/>
+						))}
+					<strong>Course authors</strong>
+					{courseAuthors.length ? (
+						courseAuthors.map((author) => (
+							<AuthorItem
+								handleClick={deleteAuthor}
+								key={author.id}
+								{...author}
+								type={DELETE_BUTTON_TYPE}
+							/>
+						))
+					) : (
+						<p className={styles.notification}>List is empty</p>
+					)}
+				</div>
+			</div>
+		</form>
+	);
+};

@@ -1,0 +1,17 @@
+.input {
+  width: 100%;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+}
+
+.newAuthorContainer {
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.newAuthorContainer > button {
+  margin-top: 16px;
+}

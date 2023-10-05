@@ -1,48 +1,67 @@
-import React, { useState } from "react";
-import { CourseInfo, Courses, Header } from "./components";
+import React, { useState } from 'react';
 
-// use mocked data till API implementation
-import { mockedAuthorsList, mockedCoursesList } from "./constants";
+import { Courses, Header } from './components';
 
-// Task 2 and 3 - wrap your App with redux Provider and BrowserRouter in src/index.js
+import styles from './App.module.css';
+
+// TODO: will be removed after API calls be added
+import { mockedAuthorsList, mockedCoursesList } from './constants';
+import { CourseForm } from './components';
+import { Login } from './components/Login';
+import { CourseInfo } from './components/CourseInfo';
+import { Registration } from './components/Registration';
+import { Route, Routes } from 'react-router';
 
 function App() {
-  const [courses, setCoursesList] = useState(mockedCoursesList);
-  const [authors] = useState(mockedAuthorsList);
-  const [selectedCourseId, setSelectedCourseId] = useState(null);
+	const token = localStorage.getItem('token');
+	const [name, setName] = useState('');
 
-  const filterCourses = (searchQuery) => {
-    const filteredCourses = mockedCoursesList.filter(({title, id}) => title.toLowerCase().includes(searchQuery.toLowerCase())
-      || id.toLowerCase().includes(searchQuery.toLowerCase()))
-    setCoursesList(filteredCourses);
-  }
+	const [courses, setCourses] = useState(mockedCoursesList);
+	const [authors, setAuthors] = useState(mockedAuthorsList);
 
-  let view = (
-    <Courses
-      coursesList={courses}
-      authorsList={authors}
-      handleShowCourse={setSelectedCourseId}
-      handleCoursesFilter={filterCourses}
-    />
-  );
+	const saveNewCourse = (item) => {
+		setCourses([...courses, item]);
+	};
 
-  if (selectedCourseId) {
-    view = (
-      <CourseInfo
-        coursesList={courses}
-        authorsList={authors}
-        showCourseId={selectedCourseId}
-        onBack={setSelectedCourseId}
-      />
-    );
-  }
-
-  return (
-    <div className="App">
-      <Header />
-      {view}
-    </div>
-  );
+	return (
+		<>
+			<Header name={name} />
+			<div className={styles.container}>
+				<Routes>
+					<Route
+						path='/'
+						element={
+							token ? (
+								<Courses coursesList={courses} authorsList={authors} />
+							) : (
+								<Login setName={setName} />
+							)
+						}
+					/>
+					<Route path='/registration' element={<Registration />} />
+					<Route path='/login' element={<Login setName={setName} />} />
+					<Route
+						path='/courses'
+						element={<Courses coursesList={courses} authorsList={authors} />}
+					/>
+					<Route
+						path='/courses/add'
+						element={
+							<CourseForm
+								authorsList={authors}
+								createCourse={saveNewCourse}
+								createAuthor={setAuthors}
+							/>
+						}
+					/>
+					<Route
+						path='/courses/:courseId'
+						element={<CourseInfo coursesList={courses} authorsList={authors} />}
+					/>
+				</Routes>
+			</div>
+		</>
+	);
 }
 
 export default App;

@@ -1,1 +1,2 @@
-export * from "./CourseCard";
+export * from './SearchBar';
+export * from './CourseCard';

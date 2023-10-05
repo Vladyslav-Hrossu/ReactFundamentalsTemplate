@@ -1,19 +1,27 @@
-import React from "react";
+import React from 'react';
 
-import styles from "./styles.module.css";
-import { Button } from "../../common";
-import { Logo } from "./components";
+import { Button } from '../../common';
+import { LOGOUT } from './constants';
+import { Logo } from './components';
+
+import styles from './styles.module.css';
+import { useNavigate } from 'react-router';
 
 export const Header = () => {
-  // write your cose here
+	const navigate = useNavigate();
+	const token = localStorage.getItem('token');
 
-  return (
-    <div className={styles.headerContainer}>
-      <Logo />
-      <div className={styles.userContainer}>
-        <p className={styles.userName}>Boris</p>
-        <Button buttonText="Login" />
-      </div>
-    </div>
-  );
+	const handleLogout = () => {
+		localStorage.removeItem('token');
+		navigate('/login');
+	};
+
+	return (
+		<div className={styles.headerContainer}>
+			<Logo />
+			<div className={styles.userContainer}>
+				{token && <Button buttonText={LOGOUT} handleClick={handleLogout} />}
+			</div>
+		</div>
+	);
 };

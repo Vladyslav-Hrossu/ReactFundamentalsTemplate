@@ -1,39 +1,61 @@
 export const createUser = async (data) => {
-  // write your code here
+	const response = await fetch('http://localhost:4000/register', {
+		method: 'POST',
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (!response.ok) {
+		throw new Error('Network Error');
+	}
 };
 
 export const login = async (data) => {
-  // write your code here
+	const response = await fetch('http://localhost:4000/login', {
+		method: 'POST',
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	console.log(response.ok);
+
+	if (!response.ok) {
+		throw new Error('Network Error');
+	}
+
+	return await response.json();
 };
 
 export const getCourses = async () => {
-  // write your code here
+	const response = await fetch('http://localhost:4000/courses/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (!response.ok) {
+		throw new Error('Network Error');
+	}
+
+	return await response.json();
 };
 
 export const getAuthors = async () => {
-  // write your code here
-};
+	const response = await fetch('http://localhost:4000/authors/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
 
-export const getCurrentUser = async () => {
-  // write your code here
-};
+	if (!response.ok) {
+		throw new Error('Network Error');
+	}
 
-export const updateCourse = async () => {
-  // write your code here
-};
-
-export const logout = async () => {
-  // write your code here
-};
-
-export const deleteCourse = async () => {
-  // write your code here
-};
-
-export const createCourse = async () => {
-  // write your code here
-};
-
-export const createAuthor = async () => {
-  // write your code here
+	return await response.json();
 };
